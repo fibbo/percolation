@@ -9,12 +9,14 @@ import edu.princeton.cs.algs4.WeightedQuickUnionUF;
  *         requirements. To use this class create a Percolation object with int
  *         N as parameter as dimension of the N*N grid.
  */
-public class Percolation {
+public class Percolation
+{
 
     // State grid
-    private Boolean[] grid;
+    private boolean[] grid;
     // Neighboring offsets to join adjacent open cells
-    private int[] neighborOffsets = { -1, 0, 1, 0, 0, -1, 0, 1 };
+    private int[] neighborOffsets =
+    { -1, 0, 1, 0, 0, -1, 0, 1 };
     // Dimension of the grid
     private int dimension;
     // Total number of cells in the grid
@@ -36,8 +38,10 @@ public class Percolation {
      * @throws IllegalArgumentException
      *             when n <= 0
      */
-    public Percolation(int n) {
-        if (n <= 0) {
+    public Percolation(int n)
+    {
+        if (n <= 0)
+        {
             throw new IllegalArgumentException();
         }
         dimension = n;
@@ -49,8 +53,9 @@ public class Percolation {
         virtualTop = n * n;
         virtualBottom = n * n + 1;
 
-        grid = new Boolean[size];
-        for (int i = 0; i < size; i++) {
+        grid = new boolean[size];
+        for (int i = 0; i < size; i++)
+        {
             grid[i] = false;
         }
     }
@@ -62,7 +67,8 @@ public class Percolation {
      * @param j
      * @return contiguous index
      */
-    private int convertToIndex(int i, int j) {
+    private int convertToIndex(int i, int j)
+    {
         return (i - 1) * dimension + (j - 1);
     }
 
@@ -79,36 +85,46 @@ public class Percolation {
      * 
      * 
      */
-    public void open(int i, int j) {
-        int index = convertToIndex(i, j);
-        if (!validIndices(index)) {
+    public void open(int i, int j)
+    {
+        
+        if (!validIndices(i, j))
+        {
             throw new IndexOutOfBoundsException();
         }
-        if (grid[index]) {
+        int index = convertToIndex(i, j);
+        if (grid[index])
+        {
             return;
         }
         grid[index] = true;
         // if i == 0 || i == n it's in the top/bottom row
         // so connect it with virtual top/bottom
-        if (i == 1) {
+        if (i == 1)
+        {
             qf.union(index, virtualTop);
             helper.union(index, virtualTop);
-        } else if (i == dimension) {
+        } 
+        if (i == dimension)
+        {
             qf.union(index, virtualBottom);
         }
-        for (int k = 0; k < 4; k++) {
-            int n_i = i + neighborOffsets[2 * k];
-            int n_j = j + neighborOffsets[2 * k + 1];
+        for (int k = 0; k < 4; k++)
+        {
+            int ni = i + neighborOffsets[2 * k];
+            int nj = j + neighborOffsets[2 * k + 1];
 
             int p = convertToIndex(i, j);
-            int q = convertToIndex(n_i, n_j);
+            int q = convertToIndex(ni, nj);
             if ((p % dimension == 0 && p - q == 1)
                     || ((p % dimension == dimension - 1) && q - p == 1) || q < 0
-                    || q >= size) {
+                    || q >= size)
+            {
                 continue;
             }
 
-            if (isOpen(n_i, n_j)) {
+            if (isOpen(ni, nj))
+            {
                 qf.union(p, q);
                 helper.union(p, q);
             }
@@ -121,65 +137,74 @@ public class Percolation {
      * @param index
      * @return true if index is valid for the grid array, false otherwise
      */
-    private boolean validIndices(int index) {
-        if (index < 0 || index >= size) {
-            return false;
-        } else {
-            return true;
-        }
-    }
 
+    private boolean validIndices(int i, int j)
+    {
+        return (i > 0 && i <= dimension && j > 0 && j <= dimension);
+    }
     /**
      * Check if site is open
+     * 
      * @param i
      * @param j
-     * @throws IndexOutOfBoundsException when index is not valid
+     * @throws IndexOutOfBoundsException
+     *             when index is not valid
      * @return
      */
-    public boolean isOpen(int i, int j) {
-        int index = convertToIndex(i, j);
-        if (!validIndices(index)) {
+    public boolean isOpen(int i, int j)
+    {
+        if (!validIndices(i, j))
+        {
             throw new IndexOutOfBoundsException();
         }
+        int index = convertToIndex(i, j);
         return grid[index];
     }
 
     /**
      * check if site is full
+     * 
      * @param i
      * @param j
-     * @throws IndexOutOfBoundsException when index is not valid
+     * @throws IndexOutOfBoundsException
+     *             when index is not valid
      * @return
      */
-    public boolean isFull(int i, int j) {
-        int index = convertToIndex(i, j);
-        if (!validIndices(index)) {
+    public boolean isFull(int i, int j)
+    {
+        
+        if (!validIndices(i, j))
+        {
             throw new IndexOutOfBoundsException();
         }
+        int index = convertToIndex(i, j);
         return qf.connected(index, virtualTop)
                 && helper.connected(index, virtualTop);
     }
 
     /**
      * Is the grid percolating or not
+     * 
      * @return true when grid percolates
      */
-    public boolean percolates() {
+    public boolean percolates()
+    {
         return qf.connected(size, size + 1);
     }
 
-    public static void main(String[] args) {
-         Percolation perc = new Percolation(Integer.parseInt(args[0]));
-        
-         perc.open(1, 2);
-         StdOut.println(perc.percolates());
-         perc.open(2, 2);
-         StdOut.println(perc.percolates());
-         perc.open(3, 2);
-         StdOut.println(perc.percolates());
-         perc.open(4, 2);
-         StdOut.println(perc.percolates());
-         perc.open(5, 2);
-         StdOut.println(perc.percolates());
+    public static void main(String[] args)
+    {
+        Percolation perc = new Percolation(Integer.parseInt(args[0]));
+
+        perc.open(1, 2);
+        StdOut.println(perc.percolates());
+        perc.open(2, 2);
+        StdOut.println(perc.percolates());
+        perc.open(3, 2);
+        StdOut.println(perc.percolates());
+        perc.open(4, 2);
+        StdOut.println(perc.percolates());
+        perc.open(5, 2);
+        StdOut.println(perc.percolates());
     }
 }
