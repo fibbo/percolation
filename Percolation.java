@@ -169,17 +169,17 @@ public class Percolation {
     }
 
     public static void main(String[] args) {
-        // Percolation perc = new Percolation(Integer.parseInt(args[0]));
-        //
-        // perc.open(1, 2);
-        // StdOut.println(perc.percolates());
-        // perc.open(2, 2);
-        // StdOut.println(perc.percolates());
-        // perc.open(3, 2);
-        // StdOut.println(perc.percolates());
-        // perc.open(4, 2);
-        // StdOut.println(perc.percolates());
-        // perc.open(5, 2);
-        // StdOut.println(perc.percolates());
+         Percolation perc = new Percolation(Integer.parseInt(args[0]));
+        
+         perc.open(1, 2);
+         StdOut.println(perc.percolates());
+         perc.open(2, 2);
+         StdOut.println(perc.percolates());
+         perc.open(3, 2);
+         StdOut.println(perc.percolates());
+         perc.open(4, 2);
+         StdOut.println(perc.percolates());
+         perc.open(5, 2);
+         StdOut.println(perc.percolates());
     }
 }
